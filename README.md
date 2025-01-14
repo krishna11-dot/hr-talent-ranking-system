@@ -1,28 +1,57 @@
 # hr-talent-ranking-system
-hr-talent-ranking-system
-An intelligent system for identifying, ranking, and re-ranking potential HR candidates using NLP and machine learning techniques.
-About The Project
-A Python-based talent ranking system that automates the process of identifying and ranking HR candidates. The system uses natural language processing and machine learning to score candidates based on job titles, locations, and professional connections, with the ability to re-rank based on user feedback through a starring mechanism.
-Features
 
-Automated Candidate Processing
+A Google Colab-based intelligent system for identifying, ranking, and re-ranking potential HR candidates using NLP and machine learning techniques.
 
-Job title standardization & matching
-Location normalization
-Connection strength analysis
-Text preprocessing and cleaning
+## Overview
+This project provides an automated talent ranking system implemented in Google Colab for processing HR candidate data. It uses natural language processing and machine learning to evaluate and rank candidates based on their job titles, locations, and professional connections.
 
+## Quick Start
+1. Open the notebook in Google Colab:
+2. Upload your `potential_talents.xlsx` file
+3. Run all cells
+4. Follow the interactive starring system to refine rankings
 
-Smart Ranking System
+## Input Data Format
+The system expects an Excel file (`potential_talents.xlsx`) with the following columns:
+- `id`: Unique identifier for each candidate
+- `job_title`: Current or desired job title
+- `location`: Geographic location
+- `connection`: Number of connections (e.g., "500+")
 
-TF-IDF vectorization with cosine similarity
-Unsupervised learning using K-means clustering
-Connection strength normalization (0.8-1.0 scale)
-Dynamic score adjustment
+## Features
+- Automated candidate preprocessing
+- Job title standardization
+- Location normalization
+- Connection strength analysis
+- Interactive candidate starring
+- Dynamic re-ranking
 
+## How It Works
+1. **Data Preprocessing**
+   - Cleans and standardizes job titles
+   - Normalizes location names
+   - Processes connection counts
 
-Interactive Features
+2. **Scoring System**
+   - Title similarity (85% weight)
+   - Clustering score (15% weight)
+   - Connection strength modifier
 
-Candidate starring system
-Similar candidate boosting
-Real-time re-ranking
+3. **Re-ranking System**
+   - Star-based score adjustments
+   - Similar profile boosting
+   - Location-based considerations
+
+## Example Usage
+```python
+# Initialize processor
+processor = HRDataProcessor()
+
+# Upload and process data
+from google.colab import files
+uploaded = files.upload()  # Upload potential_talents.xlsx
+df = pd.read_excel('potential_talents.xlsx')
+results = processor.process_data(df)
+
+# Star a candidate to re-rank
+processor.star_candidate(results.iloc[6]['id'])
