@@ -1,57 +1,57 @@
-# hr-talent-ranking-system
+# HR Talent Ranking System (Google Colab)
 
-A Google Colab-based intelligent system for identifying, ranking, and re-ranking potential HR candidates using NLP and machine learning techniques.
-
-## Overview
-This project provides an automated talent ranking system implemented in Google Colab for processing HR candidate data. It uses natural language processing and machine learning to evaluate and rank candidates based on their job titles, locations, and professional connections.
+NLP and ML-powered system for ranking HR talent with interactive feedback.
 
 ## Quick Start
-1. Open the notebook in Google Colab:
-2. Upload your `potential_talents.xlsx` file
+
+1. Open the [Potential_Talents_Ranking_System.ipynb](link_to_your_colab) notebook
+2. Upload your CSV file with columns:
+   - `ID`: Candidate identifier
+   - `Job Title`: Position title
+   - `Location`: Geographic location
+   - `Connection`: Network size
+
 3. Run all cells
-4. Follow the interactive starring system to refine rankings
 
-## Input Data Format
-The system expects an Excel file (`potential_talents.xlsx`) with the following columns:
-- `id`: Unique identifier for each candidate
-- `job_title`: Current or desired job title
-- `location`: Geographic location
-- `connection`: Number of connections (e.g., "500+")
+## System Overview
 
-## Features
-- Automated candidate preprocessing
-- Job title standardization
-- Location normalization
-- Connection strength analysis
-- Interactive candidate starring
-- Dynamic re-ranking
+### Scoring Weights
+- Title Analysis: 90%
+- Location Score: 5%
+- Network Size: 5%
 
-## How It Works
-1. **Data Preprocessing**
-   - Cleans and standardizes job titles
-   - Normalizes location names
-   - Processes connection counts
+### Candidate Categories
+| Score | Category | Description |
+|-------|----------|-------------|
+| 0.90+ | Primary Target | Aspiring/Seeking HR |
+| 0.40-0.89 | Senior HR | Experienced professionals |
+| <0.40 | Other | Non-HR roles |
 
-2. **Scoring System**
-   - Title similarity (85% weight)
-   - Clustering score (15% weight)
-   - Connection strength modifier
+### Re-ranking System
+Star any candidate to re-rank based on:
+- Role similarity (40%)
+- Experience level (30%)
+- Title keywords (30%)
 
-3. **Re-ranking System**
-   - Star-based score adjustments
-   - Similar profile boosting
-   - Location-based considerations
+## Output Format
+```
+CANDIDATE DETAILS
+----------------
+ID:       {id}
+Title:    {job_title}
+Category: {category}
+Location: {location}
+Score:    {score}
+```
 
-## Example Usage
+## Dependencies
 ```python
-# Initialize processor
-processor = HRDataProcessor()
+!pip install pandas numpy scikit-learn fuzzywuzzy python-Levenshtein
+```
 
-# Upload and process data
-from google.colab import files
-uploaded = files.upload()  # Upload potential_talents.xlsx
-df = pd.read_excel('potential_talents.xlsx')
+## Sample Usage
+```python
+processor = HRTalentProcessor()
 results = processor.process_data(df)
-
-# Star a candidate to re-rank
-processor.star_candidate(results.iloc[6]['id'])
+updated_results = processor.rerank_after_starring(results, starred_id=7)
+```
