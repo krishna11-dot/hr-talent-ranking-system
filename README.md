@@ -1,57 +1,84 @@
-# HR Talent Ranking System (Google Colab)
+# HR Talent Ranking System
 
-NLP and ML-powered system for ranking HR talent with interactive feedback.
+A machine learning system for ranking HR candidates using clustering, genetic algorithms, and expert feedback.
 
-## Quick Start
+## Key Components
 
-1. Open the [Potential_Talents_Ranking_System.ipynb](link_to_your_colab) notebook
-2. Upload your CSV file with columns:
-   - `ID`: Candidate identifier
-   - `Job Title`: Position title
-   - `Location`: Geographic location
-   - `Connection`: Network size
+### Multi-Agent Evaluation
+- Title Agents (90%): 3 agents × 30%
+- Location Agents (5%): 2 agents × 2.5%
+- Connection Agents (5%): 2 agents × 2.5%
 
-3. Run all cells
-
-## System Overview
-
-### Scoring Weights
-- Title Analysis: 90%
-- Location Score: 5%
-- Network Size: 5%
-
-### Candidate Categories
+### Score Thresholds
 | Score | Category | Description |
 |-------|----------|-------------|
-| 0.90+ | Primary Target | Aspiring/Seeking HR |
-| 0.40-0.89 | Senior HR | Experienced professionals |
-| <0.40 | Other | Non-HR roles |
+| 0.90-1.00 | Primary Target | Aspiring/seeking HR roles |
+| 0.70-0.89 | Senior HR | Leadership positions |
+| 0.50-0.69 | Standard HR | Specialists/Managers |
+| 0.40-0.49 | HR Adjacent | Related roles |
+| 0.05-0.39 | Non-HR | Other positions |
 
-### Re-ranking System
-Star any candidate to re-rank based on:
-- Role similarity (40%)
-- Experience level (30%)
-- Title keywords (30%)
+### Features
+- TF-IDF title vectorization
+- K-means clustering (n=5)
+- Genetic tie-breaking
+- Bias prevention through cluster normalization
 
-## Output Format
-```
-CANDIDATE DETAILS
-----------------
-ID:       {id}
-Title:    {job_title}
-Category: {category}
-Location: {location}
-Score:    {score}
-```
-
-## Dependencies
+## Installation
 ```python
-!pip install pandas numpy scikit-learn fuzzywuzzy python-Levenshtein
+!pip install fuzzywuzzy python-Levenshtein scikit-learn pandas numpy
 ```
 
-## Sample Usage
+## Usage
+
+1. Load data:
+```python
+df = pd.read_csv('potential-talents.csv')
+```
+
+2. Initialize processor:
 ```python
 processor = HRTalentProcessor()
 results = processor.process_data(df)
+```
+
+3. Display rankings:
+```python
+processor.display_results(results)
+```
+
+4. Re-rank based on starred candidate:
+```python
 updated_results = processor.rerank_after_starring(results, starred_id=7)
 ```
+
+## Output Format
+```
+CANDIDATE DISTRIBUTION
+---------------------
+Target Roles:  47.1%
+Senior HR:     26.0%
+Other Roles:   26.9%
+
+CANDIDATE DETAILS
+----------------
+ID:        {id}
+Title:     {job_title}
+Category:  {cleaned_title}
+Location:  {cleaned_location}
+Network:   {cleaned_connections}
+Score:     {final_score:.3f}
+```
+
+## Classes
+- `HRTalentProcessor`: Main ranking system
+- `TalentClusterer`: Title-based clustering
+- `GeneticTieBreaker`: Resolves ranking ties
+- `RankingAgent`: Individual scoring agents
+
+## Tech Stack
+- pandas/numpy: Data processing
+- scikit-learn: ML components
+- TF-IDF: Text vectorization
+- K-means: Clustering
+- Genetic algorithms: Tie-breaking
